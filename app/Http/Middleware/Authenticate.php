@@ -42,19 +42,19 @@ class Authenticate
 	 */
 	public function handle($request, Closure $next)
 	{
-		$setLocale = \Request::input('setLang');
-
-		if($setLocale) {
-			Session::put('lang', $setLocale);
-
-			return redirect()->back();
-		}
-
-		if(Session::get('lang') === null) {
-			Session::put('lang', env('LOCALE'));
-		}
-
-		\App::setLocale(Session::get('lang'));
+//		$setLocale = \Request::input('setLang');
+//
+//		if($setLocale) {
+//			Session::put('lang', $setLocale);
+//
+//			return redirect()->back();
+//		}
+//
+//		if(Session::get('lang') === null) {
+//			Session::put('lang', env('LOCALE'));
+//		}
+//
+//		\App::setLocale(Session::get('lang'));
 
 		if(Auth::check()) {
 			return $next($request);
