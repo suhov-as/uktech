@@ -62,7 +62,7 @@
         <select
           name="languages"
           class="languages" title=""
-          onchange="document.location.href = '/?setLang=' + this.value"
+          onchange="document.location.href = '' + this.value"
         >
           @if($lang === 'en')
             <option value="en">EN</option>

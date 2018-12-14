@@ -163,6 +163,7 @@ return [
 		Illuminate\Translation\TranslationServiceProvider::class,
 		Illuminate\Validation\ValidationServiceProvider::class,
 		Illuminate\View\ViewServiceProvider::class,
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
 
 		/*
 		 * Package Service Providers...
@@ -244,5 +245,6 @@ return [
 		// Debugbar
 		'Debugbar'     => Barryvdh\Debugbar\Facade::class,
 		'Image'        => Intervention\Image\Facades\Image::class,
+        'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
 	],
 ];
