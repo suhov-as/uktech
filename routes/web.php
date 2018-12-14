@@ -3,8 +3,10 @@
 Auth::routes();
 
 Route::group(
-  ['middleware' => array_merge(['site'], (env('APP_VERSION') === 'develop' ? ['auth.basic'] : [])), 'prefix' => ''],
-
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+    ],
   function() {
     Route::get('/', 'MainController@main');
     Route::get('/services/{id?}', 'MainController@services');
@@ -36,3 +38,6 @@ Route::group(
     Route::get('/{name?}', 'MainController@page');
   }
 );
+Route::post('/_tools/add_favorite', 'MainController@add_favorite');
+Route::post('/_tools/submit_required', 'MainController@submit_required');
+Route::post('/_tools/search_render_catalog', 'MainController@search_render_catalog');
