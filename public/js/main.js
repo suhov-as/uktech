@@ -422,7 +422,7 @@
 
       var playState = getCookie('play-state');
 
-      if(playState && playState === 'pause') {
+      if(!playState || playState === 'pause') {
         myAudio.get(0).pause();
         isPlaying = false;
         soundSwitcher.addClass('muted');
