@@ -426,7 +426,6 @@
         myAudio.get(0).pause();
         isPlaying = false;
         soundSwitcher.addClass('muted');
-        console.log('pause');
       }
 
       soundSwitcher.on('click', function(e) {
