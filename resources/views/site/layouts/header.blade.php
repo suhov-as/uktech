@@ -60,7 +60,7 @@
         </a>
 <script>
   function changeLang(lang) {
-var url=lang==='ru'?document.location.href.replace('/en/','/ru/'):document.location.href.replace('/ru/','/en/');
+var url=lang==='ru'?document.location.href.replace('/en','/ru'):document.location.href.replace('/ru','/en');
 document.location.href=url;
   }
 </script>
