@@ -58,11 +58,16 @@
         <a href="#" class="modal-btn link" data-toggle="modal" data-target=".request-modal">
           @lang('main.request_a_call')
         </a>
-
+<script>
+  function changeLang(lang) {
+var url=lang==='ru'?document.location.href.replace('/en','/ru'):document.location.href.replace('/ru','/en');
+document.location.href=url;
+  }
+</script>
         <select
           name="languages"
           class="languages" title=""
-          onchange="document.location.href = '/' + this.value"
+          onchange="changeLang(this.value)"
         >
           @if($lang === 'en')
             <option value="en">EN</option>

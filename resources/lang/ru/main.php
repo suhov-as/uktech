@@ -256,7 +256,7 @@ return [
   'cost_per_month'                           => 'Стоимость аренды за месяц, £',
   'about_company'                            => 'О компании',
   'company'                                  => 'Компания',
-  'portfolio'                                => 'Портфолио',
+  'portfolio'                                => 'Проданные объекты',
   'blog'                                     => 'Блог',
   'periodicity'                              => 'Периодичность',
   'subscribe_to'                             => 'На что подписались',

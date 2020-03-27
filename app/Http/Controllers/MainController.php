@@ -880,7 +880,7 @@ class MainController extends Controller
                     'count_box' => 4,
                     'group'     => $group,
                     'tags'      => explode(',', $data['blog']['tags']),
-                    'not_in'    => ['id', [$id]],
+                    'not_in'    => ['translation', [$id]],
                 ]
             );
 
