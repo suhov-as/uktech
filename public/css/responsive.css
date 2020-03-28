@@ -190,6 +190,10 @@
         height: 46px;
     }
 
+    .site-header .kw-logo img{
+        width: 86px;
+    }
+
     .site-nav .menu {
         font-size: 12px;
     }
@@ -1323,12 +1327,12 @@
         padding: 40px 0;
     }
 
-    .site-header .button {
-        font-size: 10px;
+    .site-header .position-box .button {
+        display: none;
     }
 
     .site-header .button + .wish-list {
-        margin-left: 15px;
+        margin-left: 0;
     }
 
     .site-header .sound-switcher {
@@ -1820,8 +1824,8 @@
     }
 
     .site-header .logo svg {
-        width: 130px;
-        height: 41px;
+        width: 110px;
+        height: 34px;
     }
 
     .site-nav .menu {
@@ -1832,7 +1836,20 @@
         margin-bottom: 0;
     }
 
-    .site-header .position-box .button,
+    .site-header .menu-btn > span:before,
+    .site-header .menu-btn > span:after,
+    .site-header .menu-btn > span {
+        height: 2px;
+    }
+
+    .site-header .menu-btn > span:before {
+        top: -8px;
+    }
+
+    .site-header .menu-btn > span:after {
+        bottom: -8px;
+    }
+
     .site-header .action-line .phone-link {
         display: none;
     }
@@ -1851,8 +1868,13 @@
     }
 
     .site-header .menu-btn {
-        margin-left: 10px;
-        width: 28px;
+        margin-left: 8px;
+        width: 24px;
+    }
+
+    .site-header .wish-list svg {
+        width: 22px;
+        height: 22px;
     }
 
     .billboard {
