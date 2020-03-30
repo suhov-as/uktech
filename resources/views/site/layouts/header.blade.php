@@ -129,7 +129,7 @@ document.location.href=url;
             </g>
         </svg>
         </a>
-        <a class="kw-logo" href="https://www.kw.com/"><img src="http://ga.reconcept.ru/UK-property/images/kw-logo.png" alt=""></a>
+        <a class="kw-logo" href="https://www.kw.com/"><img src="/img/kw-logo.png" alt=""></a>
       </div>
       <nav class="site-nav">
         <a href="javascript:void(0);" class="close-btn">
