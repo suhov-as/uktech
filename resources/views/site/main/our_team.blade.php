@@ -1,7 +1,6 @@
 @extends('site.layouts.default')
 
 @section('content')
-    <?php xdebug_break(); ?>
     @php($path_big = '/images/files/big/')
     <main class="main">
         <section class="indent-block">
