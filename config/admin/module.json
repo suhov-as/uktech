@@ -254,11 +254,6 @@
     "plugins"         : [
       "name",
       "block_1",
-      "block_1_1",
-      "block_1_2",
-      "block_2",
-      "block_3",
-      "block_3_1",
       "block_4_1",
       "block_4_2",
       "active",
