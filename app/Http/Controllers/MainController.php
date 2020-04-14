@@ -769,6 +769,33 @@ class MainController extends Controller
     }
 
     /**
+     * About Company.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function our_team()
+    {
+        $data = $this->helper->duplicate_data();
+        $data['users'] = $this
+            ->dynamic
+            ->t('users')
+            ->where('users.active', '=', 1)
+            ->get()
+            ->toArray();
+
+        $data['team'] = $this
+            ->dynamic
+            ->t('our_team')
+            ->where('our_team.active', '=', 1)
+            ->first()
+            ->toArray();
+
+        $data['meta_c'] = $this->base->getMeta($data, 'team');
+
+        return $this->base->view_s('site.main.our_team', $data);
+    }
+
+    /**
      * Selection request.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

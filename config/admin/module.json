@@ -1148,5 +1148,47 @@
         "parent_table": "params_development_facilities"
       }
     }
+  },
+  {
+    "id"              : "26",
+    "active"          : true,
+    "big_height"      : "1200",
+    "big_width"       : "800",
+    "class_module"    : "fa fa-file-text-o",
+    "column_index"    : [
+      "name",
+      "description",
+      "active"
+    ],
+    "count_module"    : "20",
+    "show_count"      : true,
+    "filters"         : [],
+    "lang"            : [
+      "name",
+      "block_1",
+      "block_2",
+      "title",
+      "keywords",
+      "description"
+    ],
+    "link_module"     : "our_team",
+    "link_site_module": "",
+    "menu_table_name" : "menu",
+    "name_module"     : "Наша команда",
+    "order"           : "8",
+    "plugins"         : [
+      "name",
+      "block_1",
+      "block_2",
+      "active",
+      "title",
+      "keywords",
+      "description"
+    ],
+    "small_width"     : "500",
+    "small_height"    : "350",
+    "sort"            : "1",
+    "views_module"    : "table",
+    "translate_key"   : "our_team"
   }
 ]
