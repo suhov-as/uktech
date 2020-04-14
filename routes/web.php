@@ -13,6 +13,7 @@ Route::group(
         Route::get('/blog/{id?}', 'MainController@blog');
         Route::get('/contact-us', 'MainController@contact_us');
         Route::get('/about-company', 'MainController@about_company');
+        Route::get('/our-team', 'MainController@our_team');
         Route::get('/portfolio/{page?}', 'MainController@portfolio');
         Route::get('/friend_form', 'MainController@friend_form');
 
