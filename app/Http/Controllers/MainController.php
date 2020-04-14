@@ -779,6 +779,11 @@ class MainController extends Controller
         $data['employees'] = $this
             ->dynamic
             ->t('employees')
+            ->join('files',function ($join) {
+                $join->type = 'LEFT OUTER';
+                $join->on('employees.id', '=', 'files.id_album')
+                    ->where('files.name_table', '=', 'employeesalbum');
+            })
             ->where('employees.active', '=', 1)
             ->get()
             ->toArray();

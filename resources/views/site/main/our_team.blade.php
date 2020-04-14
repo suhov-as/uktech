@@ -1,6 +1,7 @@
 @extends('site.layouts.default')
 
 @section('content')
+    <?php xdebug_break(); ?>
     @php($path_big = '/images/files/big/')
     <main class="main">
         <section class="indent-block">
@@ -19,9 +20,10 @@
         <section class="indent-block">
             <div class="container">
                 @foreach($employees as $emp)
+                    @php($img = $emp['file'] ? $emp['crop'] ? $path_big . $emp['crop'] : $path_big . $emp['file'] : '')
                     <div class="team-member">
                         <div class="team-member__info">
-                            <img src="/images/content/img_40.jpg" alt="">
+                            <img src="{{ $img }}" alt="">
                             <div class="team-member__info-content">
                                 <h4 class="team-member__title">{!! $langSt($emp['name']) !!}</h4>
                                 <span class="team-member__subtitle">{!! $langSt($emp['position']) !!}</span>
@@ -38,7 +40,8 @@
                             </div>
                         </div>
                         <div class="team-member__description">
-                            {!! $langSt($emp['user_description']) !!}
+                            <h4>{!! $langSt($emp['name']) !!}</h4>
+                            <p>{!! $langSt($emp['user_description']) !!}</p>
                         </div>
                     </div>
                 @endforeach
