@@ -1166,7 +1166,6 @@
     "lang"            : [
       "name",
       "block_1",
-      "block_2",
       "title",
       "keywords",
       "description"
@@ -1179,7 +1178,6 @@
     "plugins"         : [
       "name",
       "block_1",
-      "block_2",
       "active",
       "title",
       "keywords",
