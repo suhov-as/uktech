@@ -1911,6 +1911,7 @@
   {
     "name"        : "user_description",
     "typeField"   : "textarea",
+    "classAttr"   : "area",
     "nameText"    : "Описание",
     "nameAttr"    : "pl[user_description]",
     "description" : "Текстовое поле \"user_description\"",
