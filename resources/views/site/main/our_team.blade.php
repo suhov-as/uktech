@@ -27,11 +27,11 @@
                                 <span class="team-member__subtitle">{!! $langSt($emp['position']) !!}</span>
                                 <address class="team-member__contact-info">
                                 <span class="address-info">
-                                    <svg><use xlink:href="images/svg/sprite.svg#envelope"></use></svg>
+                                    <svg><use xlink:href="/images/svg/sprite.svg#envelope"></use></svg>
                                     <a href="mailto:name@gmail.com">{!! $langSt($emp['email']) !!}</a>
                                 </span>
                                     <span class="address-info">
-                                    <svg><use xlink:href="images/svg/sprite.svg#phone"></use></svg>
+                                    <svg><use xlink:href="/images/svg/sprite.svg#phone"></use></svg>
                                     <a href="tel:{!! $langSt($emp['phone']) !!}">{!! $langSt($emp['phone']) !!}</a>
                                 </span>
                                 </address>
