@@ -116,6 +116,7 @@ return [
     'reviews'                        => 'Reviews',
     'about_company'                  => 'About company',
     'our_team'                       => 'Our team',
+    'employees'                      => 'Employees',
     'invest_in_development_projects' => 'Investing in Development Project (1)',
     'catalog_new_building'           => 'Investing in Off-Plan Property (2)',
     'catalog_buy'                    => 'Buy (3)',

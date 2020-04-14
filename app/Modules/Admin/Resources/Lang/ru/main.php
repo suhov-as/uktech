@@ -116,6 +116,7 @@ return [
     'reviews'                        => 'Отзывы',
     'about_company'                  => 'О компании',
     'our_team'                       => 'Наша команда',
+    'employees'                      => 'Сотрудники',
     'invest_in_development_projects' => 'Инвестиции в Девелоперские Проекты (1)',
     'catalog_new_building'           => 'Инвестиции в Новостройки (2)',
     'catalog_buy'                    => 'Купить (3)',

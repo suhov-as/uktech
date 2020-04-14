@@ -776,10 +776,10 @@ class MainController extends Controller
     public function our_team()
     {
         $data = $this->helper->duplicate_data();
-        $data['users'] = $this
+        $data['employees'] = $this
             ->dynamic
-            ->t('users')
-            ->where('users.active', '=', 1)
+            ->t('employees')
+            ->where('employees.active', '=', 1)
             ->get()
             ->toArray();
 

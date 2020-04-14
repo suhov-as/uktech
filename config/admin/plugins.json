@@ -1907,5 +1907,27 @@
       "type": "replace",
       "multiple": "multiple"
     }
+  },
+  {
+    "name"        : "user_description",
+    "typeField"   : "textarea",
+    "nameText"    : "Описание",
+    "nameAttr"    : "pl[user_description]",
+    "description" : "Текстовое поле \"user_description\"",
+    "idAttr"      : "textareaUser_description",
+    "maxlength"   : "12000",
+    "translateKey": "user_description",
+    "sql_column"  : "user_description"
+  },
+  {
+    "name"        : "position",
+    "typeField"   : "input",
+    "nameText"    : "Должность",
+    "nameAttr"    : "pl[position]",
+    "description" : "Текстовое поле \"position\"",
+    "idAttr"      : "inputPosition",
+    "maxlength"   : "500",
+    "translateKey": "position",
+    "sql_column"  : "position"
   }
 ]
