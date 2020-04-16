@@ -68,8 +68,9 @@ class MainController extends Controller
             [['blog.active', 1], ['blog.to_main', 1]]
         );
 
-        foreach ($this->helper->_services() as $k => $serv)
+        foreach ($this->helper->_services() as $k => $serv) {
             $data['services'][$serv['translation'] ?? $k] = $serv;
+        }
 
         $services_key = array_keys($data['services']);
 
@@ -176,8 +177,13 @@ class MainController extends Controller
             ->dynamic
             ->t('about_company')
             ->where('about_company.active', '=', 1)
-            ->first()
-            ->toArray();
+            ->first();
+        $data['about'] = $this
+            ->dynamic
+            ->t('about_company')
+            ->where('about_company.active', '=', 1)
+            ->first();
+        $data['about'] = $data['about'] ? $data['about']->toArray() : null;
 
         $data['meta_c'] = $this->base->getMeta($data['main_page']);
 
@@ -707,7 +713,7 @@ class MainController extends Controller
     /**
      * Услуги.
      *
-     * @param null $id
+     * @param  null  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function services($id = null)
@@ -736,8 +742,11 @@ class MainController extends Controller
             ->dynamic
             ->t('about_company')
             ->where('about_company.active', '=', 1)
-            ->first()
-            ->toArray();
+            ->first();
+        if (empty($data['about'])) {
+            return $this->helper->_errors_404();
+        }
+        $data['about'] = $data['about']->toArray();
 
         $data['images'] = $this
             ->dynamic
@@ -779,7 +788,7 @@ class MainController extends Controller
         $data['employees'] = $this
             ->dynamic
             ->t('employees')
-            ->join('files',function ($join) {
+            ->join('files', function ($join) {
                 $join->type = 'LEFT OUTER';
                 $join->on('employees.id', '=', 'files.id_album')
                     ->where('files.name_table', '=', 'employeesalbum');
@@ -792,9 +801,12 @@ class MainController extends Controller
             ->dynamic
             ->t('our_team')
             ->where('our_team.active', '=', 1)
-            ->first()
-            ->toArray();
+            ->first();
 
+        if (empty($data['team'])) {
+            return $this->helper->_errors_404();
+        }
+        $data['team'] = $data['team']->toArray();
         $data['meta_c'] = $this->base->getMeta($data, 'team');
 
         return $this->base->view_s('site.main.our_team', $data);
@@ -822,10 +834,11 @@ class MainController extends Controller
         $id_segment = $this->requests->segment(1);
         $data = $this->helper->duplicate_data();
 
-        if (!is_numeric($id_segment))
+        if (!is_numeric($id_segment)) {
             $where_id = ['menu.translation' => $id_segment];
-        else
+        } else {
             $where_id = ['menu.id' => $id_segment];
+        }
 
         $data['menu_segment'] = $this->dynamic->t('menu')
             ->where($where_id)
@@ -848,7 +861,7 @@ class MainController extends Controller
     /**
      * Blog.
      *
-     * @param null $id
+     * @param  null  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function blog($id = null)
@@ -857,8 +870,9 @@ class MainController extends Controller
         $blog = $this->dynamic->t('blog')->select('tags')->get()->toArray();
         $tags_id = [];
 
-        foreach ($blog as $v)
+        foreach ($blog as $v) {
             $tags_id = array_merge($tags_id, json_decode($v['tags'], true));
+        }
 
         $data['tags'] = $this->dynamic->t('tags')->whereIn('id', $tags_id)->limit(100)->get()->toArray();
         $where[] = ['blog.active', 1];
@@ -866,15 +880,17 @@ class MainController extends Controller
         $group = 'id';
 
         if ($id) {
-            if (!is_numeric($id))
+            if (!is_numeric($id)) {
                 $where_id = ['blog.translation' => $id];
-            else
+            } else {
                 $where_id = ['blog.id' => $id];
+            }
 
             $data['blog'] = $this->helper->_blog($id);
 
-            if (empty($data['blog']))
+            if (empty($data['blog'])) {
                 return $this->helper->_errors_404();
+            }
 
             $views_ip = $this
                 ->dynamic
@@ -960,97 +976,98 @@ class MainController extends Controller
         $query = function ($count) use ($q) {
             return '
 			(SELECT
-			 ' . ($count ? 'COUNT(str.id) AS count' : ('str.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(str.id) AS count' : ('str.id COLLATE utf8_general_ci as id,
 			 str.name COLLATE utf8_general_ci as name,
 			 str.name_table COLLATE utf8_general_ci as name_table,
 			 str.translation COLLATE utf8_general_ci as translation,
-			 str.text COLLATE utf8_general_ci as text')) . '
+			 str.text COLLATE utf8_general_ci as text')).'
 			FROM str
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(catalog_buy.id) AS count' : ('catalog_buy.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(catalog_buy.id) AS count' : ('catalog_buy.id COLLATE utf8_general_ci as id,
 			 catalog_buy.name COLLATE utf8_general_ci as name,
 			 catalog_buy.name_table COLLATE utf8_general_ci as name_table,
 			 catalog_buy.translation COLLATE utf8_general_ci as translation,
-			 catalog_buy.text COLLATE utf8_general_ci as text')) . '
+			 catalog_buy.text COLLATE utf8_general_ci as text')).'
 			FROM catalog_buy
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(catalog_development_projects.id) AS count' : ('catalog_development_projects.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(catalog_development_projects.id) AS count' : ('catalog_development_projects.id COLLATE utf8_general_ci as id,
 			 catalog_development_projects.name COLLATE utf8_general_ci as name,
 			 catalog_development_projects.name_table COLLATE utf8_general_ci as name_table,
 			 catalog_development_projects.translation COLLATE utf8_general_ci as translation,
-			 catalog_development_projects.text COLLATE utf8_general_ci as text')) . '
+			 catalog_development_projects.text COLLATE utf8_general_ci as text')).'
 			FROM catalog_development_projects
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 			
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(catalog_new_building.id) AS count' : ('catalog_new_building.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(catalog_new_building.id) AS count' : ('catalog_new_building.id COLLATE utf8_general_ci as id,
 			 catalog_new_building.name COLLATE utf8_general_ci as name,
 			 catalog_new_building.name_table COLLATE utf8_general_ci as name_table,
 			 catalog_new_building.translation COLLATE utf8_general_ci as translation,
-			 catalog_new_building.text COLLATE utf8_general_ci as text')) . '
+			 catalog_new_building.text COLLATE utf8_general_ci as text')).'
 			FROM catalog_new_building
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(catalog_rent.id) AS count' : ('catalog_rent.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(catalog_rent.id) AS count' : ('catalog_rent.id COLLATE utf8_general_ci as id,
 			 catalog_rent.name COLLATE utf8_general_ci as name,
 			 catalog_rent.name_table COLLATE utf8_general_ci as name_table,
 			 catalog_rent.translation COLLATE utf8_general_ci as translation,
-			 catalog_rent.text COLLATE utf8_general_ci as text')) . '
+			 catalog_rent.text COLLATE utf8_general_ci as text')).'
 			FROM catalog_rent
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(services.id) AS count' : ('services.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(services.id) AS count' : ('services.id COLLATE utf8_general_ci as id,
 			 services.name COLLATE utf8_general_ci as name,
 			 services.name_table COLLATE utf8_general_ci as name_table,
 			 services.translation COLLATE utf8_general_ci as translation,
-			 services.text COLLATE utf8_general_ci as text')) . '
+			 services.text COLLATE utf8_general_ci as text')).'
 			FROM services
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-			 ' . ($count ? 'COUNT(main.id) AS count' : ('main.id COLLATE utf8_general_ci as id,
+			 '.($count ? 'COUNT(main.id) AS count' : ('main.id COLLATE utf8_general_ci as id,
 			 main.name COLLATE utf8_general_ci as name,
 			 main.name_table COLLATE utf8_general_ci as name_table,
 			 main.translation COLLATE utf8_general_ci as translation,
-			 main.text COLLATE utf8_general_ci as text')) . '
+			 main.text COLLATE utf8_general_ci as text')).'
 			FROM main
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')
 
 			UNION ALL
 
 			(SELECT
-		 ' . ($count ? 'COUNT(blog.id) AS count' : ('blog.id COLLATE utf8_general_ci as id,
+		 '.($count ? 'COUNT(blog.id) AS count' : ('blog.id COLLATE utf8_general_ci as id,
 			 blog.name COLLATE utf8_general_ci as name,
 			 blog.name_table COLLATE utf8_general_ci as name_table,
 			 blog.translation COLLATE utf8_general_ci as translation,
-			 blog.text COLLATE utf8_general_ci as text')) . '
+			 blog.text COLLATE utf8_general_ci as text')).'
 			FROM blog
-			WHERE `text` LIKE \'%' . trim($q) . '%\' OR `name` LIKE \'%' . trim($q) . '%\')';
+			WHERE `text` LIKE \'%'.trim($q).'%\' OR `name` LIKE \'%'.trim($q).'%\')';
         };
 
-        $data['search'] = \DB::select($query(false) . ' ORDER BY `id` DESC LIMIT ' . ($page) . ', ' . ($limit) . ';');
+        $data['search'] = \DB::select($query(false).' ORDER BY `id` DESC LIMIT '.($page).', '.($limit).';');
         $data['count'] = \DB::select($query(true));
 
-        foreach ($data['count'] as $v)
+        foreach ($data['count'] as $v) {
             $count = $count + $v->count;
+        }
 
         $data['count'] = $count;
         $data['page'] = $page ? $page / $limit : 1;
@@ -1075,40 +1092,46 @@ class MainController extends Controller
         $data['count'] = 0;
 
         if ($type === 'add') {
-            for ($i = 0; count($cart) > $i; $i++)
+            for ($i = 0; count($cart) > $i; $i++) {
                 if ($cart[$i]['id'] == $id && $cart[$i]['name_url'] == $name_url) {
                     $idd = true;
                     break;
                 }
+            }
 
-            if (!$idd)
+            if (!$idd) {
                 $this->requests->session()->put(
                     'cart',
                     array_merge($cart, [$id => ['id' => $id, 'name_url' => $name_url]])
                 );
+            }
 
             $cart = array_values($this->requests->session()->get('cart') ?? []);
         }
 
         if ($type === 'remove') {
-            for ($i = 0; count($cart) > $i; $i++)
+            for ($i = 0; count($cart) > $i; $i++) {
                 if ($cart[$i]['id'] == $id && $cart[$i]['name_url'] == $name_url) {
                     unset($cart[$i]);
                     break;
                 }
+            }
 
             $this->requests->session()->flush('cart');
             $this->requests->session()->put('cart', $cart);
         }
 
-        foreach ($this->requests->session()->get('cart') ?? [] as $v)
+        foreach ($this->requests->session()->get('cart') ?? [] as $v) {
             $data['cart'][$v['id']] = $v;
+        }
 
         $data['result'] = 'ok';
 
-        foreach ($cart ?? [] as $c)
-            if (($c['id'] ?? 0) != 0 && ($c['name_url'] ?? '') != '')
+        foreach ($cart ?? [] as $c) {
+            if (($c['id'] ?? 0) != 0 && ($c['name_url'] ?? '') != '') {
                 $data['count']++;
+            }
+        }
 
         return json_encode($data);
     }
@@ -1116,9 +1139,9 @@ class MainController extends Controller
     /**
      * Страницы.
      *
-     * @param null   $id
-     * @param string $view
-     * @param string $name_table
+     * @param  null  $id
+     * @param  string  $view
+     * @param  string  $name_table
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function page($id = null, $view = 'site.main.page_id', $name_table = 'str')
@@ -1131,7 +1154,7 @@ class MainController extends Controller
     /**
      * Портфолио.
      *
-     * @param null $page
+     * @param  null  $page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function portfolio($page = null)
@@ -1184,18 +1207,20 @@ class MainController extends Controller
             return $this->base->lang($t, $l);
         };
 
-        foreach ($param as $key => $p)
+        foreach ($param as $key => $p) {
             $params['params'][$p->name] = $p->toArray();
+        }
 
         $form = $this->base->decode_serialize($this->request);
         $params['current_url'] = $form['current_url'];
         $form_data = [];
         $type = $this->request['type'];
         $title = '';
-        $from = 'no-realy@' . env('APP_URL_DOMIN');
+        $from = 'no-realy@'.env('APP_URL_DOMIN');
 
-        foreach ($form as $k => $v)
-            $form_data[$k] = (int)$v == -1 ? '' : $v;
+        foreach ($form as $k => $v) {
+            $form_data[$k] = (int) $v == -1 ? '' : $v;
+        }
 
         $form_data['lang'] = Session::get('lang');
 
@@ -1207,7 +1232,7 @@ class MainController extends Controller
                 ->where('subscribe_mail', '=', trim($form_data['email']))
                 ->first();
 
-            if (!$subscribe_mail)
+            if (!$subscribe_mail) {
                 $this->dynamic->t('params_subscribe')->insertGetId(
                     [
                         'created_at'     => Carbon::now(),
@@ -1216,10 +1241,11 @@ class MainController extends Controller
                         'type_subscribe' => $form_data['type_subscribe'],
                     ]
                 );
+            }
 
             // Отправка уведомления
             Mail::send(
-                'emails.' . $type,
+                'emails.'.$type,
                 array_merge($form_data, $params),
 
                 function ($m) use ($params, $param, $from, $form_data) {
@@ -1234,7 +1260,7 @@ class MainController extends Controller
 
             // Отправка уведомления
             Mail::send(
-                'emails.' . $type,
+                'emails.'.$type,
                 array_merge($form_data, $params),
 
                 function ($m) use ($params, $param, $from, $form_data) {
@@ -1249,7 +1275,7 @@ class MainController extends Controller
 
             // Отправка уведомления
             Mail::send(
-                'emails.' . $type,
+                'emails.'.$type,
                 array_merge($form_data, $params),
 
                 function ($m) use ($params, $param, $from, $form_data) {
@@ -1264,7 +1290,7 @@ class MainController extends Controller
 
             // Отправка уведомления
             Mail::send(
-                'emails.' . $type,
+                'emails.'.$type,
                 array_merge($form_data, $params),
 
                 function ($m) use ($params, $param, $from, $form_data) {
@@ -1279,8 +1305,9 @@ class MainController extends Controller
             $cart_data = [];
             $cart = array_values($this->requests->session()->get('cart') ?? []);
 
-            for ($i = 0; count($cart ?? []) > $i; $i++)
+            for ($i = 0; count($cart ?? []) > $i; $i++) {
                 $cart_data[$cart[$i]['name_url']][] = $cart[$i]['id'] ?? 0;
+            }
             $objects = [];
             foreach ($cart_data as $k => $ids) {
                 $filters = $this->_catalog_array($k);
@@ -1288,8 +1315,9 @@ class MainController extends Controller
                 if ($filters) {
                     $query = $this->dynamic->t($filters['table']);
 
-                    if (!empty($ids))
+                    if (!empty($ids)) {
                         $query = $query->whereIn("{$filters['table']}.id", $ids);
+                    }
 
                     $catalog = $query
                         ->join(
@@ -1316,7 +1344,7 @@ class MainController extends Controller
             foreach ($form_data['friend_email'] as $em) {
                 $form_data['email_r'] = $em;
                 Mail::send(
-                    'emails.' . $type,
+                    'emails.'.$type,
                     array_merge($form_data, $params),
 
                     function ($m) use ($params, $param, $from, $form_data) {
@@ -1331,9 +1359,9 @@ class MainController extends Controller
                 $params['is_agent_form'] = true;
 
                 // Отправка уведомления
-                foreach (explode(',', $params['langSt']($params['params']['email_notifications_agent']['key'])) as $mail)
+                foreach (explode(',', $params['langSt']($params['params']['email_notifications_agent']['key'])) as $mail) {
                     Mail::send(
-                        'emails.' . $type,
+                        'emails.'.$type,
                         array_merge($form_data, $params),
 
                         function ($m) use ($params, $param, $title, $from, $form_data, $mail) {
@@ -1341,16 +1369,17 @@ class MainController extends Controller
                             $m->to(trim($mail), 'no-realy')->subject($title);
                         }
                     );
+                }
             }
         }
 
-        $params['admin_text'] = __('main.' . $type);
+        $params['admin_text'] = __('main.'.$type);
         $params['is_agent_form'] = true;
 
         // Отправка уведомления администратору
-        foreach (explode(',', $params['langSt']($params['params']['email_notifications']['key'])) as $mail)
+        foreach (explode(',', $params['langSt']($params['params']['email_notifications']['key'])) as $mail) {
             $r = Mail::send(
-                'emails.' . $type,
+                'emails.'.$type,
                 array_merge($form_data, $params),
 
                 function ($m) use ($params, $param, $title, $from, $mail) {
@@ -1358,6 +1387,7 @@ class MainController extends Controller
                     $m->to(trim($mail), 'no-realy')->subject($title);
                 }
             );
+        }
 
         $ret['result'] = 'ok';
         echo json_encode($ret);
@@ -1367,7 +1397,7 @@ class MainController extends Controller
 
     /**
      * @param      $name
-     * @param null $id
+     * @param  null  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function catalog($name, $id = null)
@@ -1378,8 +1408,9 @@ class MainController extends Controller
         $cart = array_values($this->requests->session()->get('cart') ?? []);
         $favorites_id = [];
 
-        if (empty($filters))
+        if (empty($filters)) {
             return $this->helper->_errors_404();
+        }
 
         $data['service'] = [];
         $data['filters'] = $filters;
@@ -1390,17 +1421,17 @@ class MainController extends Controller
             $data['name'] = $name;
             $data['meta_c'] = $this->base->getMeta($data, 'page');
 
-            if ($filters['name'] === 'buy')
+            if ($filters['name'] === 'buy') {
                 if ($data['page']['price_money_from']) {
                     $where_similar = array_merge(
                         $where_similar,
 
                         [
-                            ["{$filters['table']}.price_money_from", '>', (int)$data['page']['price_money_from'] - 250000],
-                            ["{$filters['table']}.price_money_from", '<', (int)$data['page']['price_money_from'] + 250000],
+                            ["{$filters['table']}.price_money_from", '>', (int) $data['page']['price_money_from'] - 250000],
+                            ["{$filters['table']}.price_money_from", '<', (int) $data['page']['price_money_from'] + 250000],
 
-                            ["{$filters['table']}.price_money_to", '>', (int)$data['page']['price_money_to'] - 250000],
-                            ["{$filters['table']}.price_money_to", '<', (int)$data['page']['price_money_to'] + 250000],
+                            ["{$filters['table']}.price_money_to", '>', (int) $data['page']['price_money_to'] - 250000],
+                            ["{$filters['table']}.price_money_to", '<', (int) $data['page']['price_money_to'] + 250000],
                         ]
                     );
                 } else {
@@ -1408,14 +1439,15 @@ class MainController extends Controller
                         $where_similar,
 
                         [
-                            ["{$filters['table']}.price_money", '>', (int)$data['page']['price_money'] - 250000],
-                            ["{$filters['table']}.price_money", '<', (int)$data['page']['price_money'] + 250000],
+                            ["{$filters['table']}.price_money", '>', (int) $data['page']['price_money'] - 250000],
+                            ["{$filters['table']}.price_money", '<', (int) $data['page']['price_money'] + 250000],
 
-                            ["{$filters['table']}.price_money", '>', (int)$data['page']['price_money'] - 250000],
-                            ["{$filters['table']}.price_money", '<', (int)$data['page']['price_money'] + 250000],
+                            ["{$filters['table']}.price_money", '>', (int) $data['page']['price_money'] - 250000],
+                            ["{$filters['table']}.price_money", '<', (int) $data['page']['price_money'] + 250000],
                         ]
                     );
                 }
+            }
 
             $where_similar = array_merge(
                 $where_similar,
@@ -1469,7 +1501,7 @@ class MainController extends Controller
                 ->get()
                 ->toArray();
 
-            if ($data['page']['cat_location'])
+            if ($data['page']['cat_location']) {
                 $data['params_cat_location'] = $this
                     ->dynamic
                     ->t('params_cat_location')
@@ -1481,10 +1513,11 @@ class MainController extends Controller
                     )
                     ->first()
                     ->toArray();
-            else
+            } else {
                 $data['params_cat_location'] = [];
+            }
 
-            if ($data['page']['type_object'] && is_array(json_decode($data['page']['type_object'], true)))
+            if ($data['page']['type_object'] && is_array(json_decode($data['page']['type_object'], true))) {
                 $data['params_type_object'] = $this
                     ->dynamic
                     ->t($filters['filters']['type_object']['table'] ?? 'params_type_object')
@@ -1492,10 +1525,11 @@ class MainController extends Controller
                     ->whereIn('id', json_decode($data['page']['type_object'], true) ?? [])
                     ->get()
                     ->toArray();
-            else
+            } else {
                 $data['params_type_object'] = [];
+            }
 
-            if ($data['page']['development_facilities'] && is_array(json_decode($data['page']['development_facilities'], true)))
+            if ($data['page']['development_facilities'] && is_array(json_decode($data['page']['development_facilities'], true))) {
                 $data['development_facilities'] = $this
                     ->dynamic
                     ->t('params_development_facilities')
@@ -1503,10 +1537,11 @@ class MainController extends Controller
                     ->whereIn('id', json_decode($data['page']['development_facilities'], true) ?? [])
                     ->get()
                     ->toArray();
-            else
+            } else {
                 $data['development_facilities'] = [];
+            }
 
-            if ($data['page']['estimated_completion'] && is_array(json_decode($data['page']['estimated_completion'], true)))
+            if ($data['page']['estimated_completion'] && is_array(json_decode($data['page']['estimated_completion'], true))) {
                 $data['estimated_completion'] = $this
                     ->dynamic
                     ->t('params_estimated_completion')
@@ -1514,11 +1549,13 @@ class MainController extends Controller
                     ->whereIn('id', json_decode($data['page']['estimated_completion'], true) ?? [])
                     ->get()
                     ->toArray();
-            else
+            } else {
                 $data['estimated_completion'] = [];
+            }
 
-            for ($i = 0; count($cart ?? []) > $i; $i++)
+            for ($i = 0; count($cart ?? []) > $i; $i++) {
                 $favorites_id[] = $cart[$i]['id'];
+            }
 
             $data['favorites_id'] = $favorites_id;
 
@@ -1558,7 +1595,7 @@ class MainController extends Controller
                                     [
                                         "{$data['filters']['table']}.{$filter['column']}",
                                         'like',
-                                        '%"' . $f['id'] . '"%',
+                                        '%"'.$f['id'].'"%',
                                     ],
                                 ]
                             )
@@ -1569,35 +1606,41 @@ class MainController extends Controller
                     $tmp = $data['filters']['filters'][$key]['data'];
                     $data['filters']['filters'][$key]['data'] = [];
 
-                    if (is_numeric($flt_res[$key][$filter['column']]))
+                    if (is_numeric($flt_res[$key][$filter['column']])) {
                         $flt_res[$key][$filter['column']] = [$flt_res[$key][$filter['column']]];
-                    else
+                    } else {
                         $flt_res[$key][$filter['column']] = json_decode($flt_res[$key][$filter['column']], true);
+                    }
 
                     $ids = [];
 
                     foreach ($flt_res[$key] ?? [] as $f) {
-                        if ($f[$key])
-                            if (is_numeric($f[$key]))
+                        if ($f[$key]) {
+                            if (is_numeric($f[$key])) {
                                 $ids = array_merge($ids, [$f[$key]]);
-                            else
+                            } else {
                                 $ids = array_merge($ids, json_decode($f[$key], true));
+                            }
+                        }
                     }
 
                     $ids = array_unique($ids);
 
                     foreach ($tmp as $k => $ff) {
-                        if (array_search($ff['id'], $ids) !== false)
-                            if (!isset($data['filters']['filters'][$key]['data'][$ff['id']]))
+                        if (array_search($ff['id'], $ids) !== false) {
+                            if (!isset($data['filters']['filters'][$key]['data'][$ff['id']])) {
                                 $data['filters']['filters'][$key]['data'][$ff['id']] = $ff;
+                            }
+                        }
                     }
 
                     usort(
                         $data['filters']['filters'][$key]['data'],
 
                         function ($a, $b) {
-                            if ($a['id'] == $b['id'])
+                            if ($a['id'] == $b['id']) {
                                 return ($a['id'] < $b['id']) ? -1 : 1;
+                            }
 
                             return ($a['id'] < $b['id']) ? -1 : 1;
                         }
@@ -1625,9 +1668,11 @@ class MainController extends Controller
                 }
             }
 
-            foreach ($data['services'] as $service)
-                if ($service['translation'] === $name)
+            foreach ($data['services'] as $service) {
+                if ($service['translation'] === $name) {
                     $data['service'] = $service;
+                }
+            }
 
 
             $data['meta_c'] = $this->base->getMeta($data, 'service');
@@ -1646,8 +1691,9 @@ class MainController extends Controller
         $session = $form['session'] ?? false;
         $portfolio = $form['is_portfolio'] ?? false;
 
-        for ($i = 0; count($cart ?? []) > $i; $i++)
+        for ($i = 0; count($cart ?? []) > $i; $i++) {
             $favorites_id[] = $cart[$i]['id'];
+        }
 
         if ($form['name_url'] && !$session) {
             $filters = $this->_catalog_array($form['name_url']);
@@ -1744,23 +1790,25 @@ class MainController extends Controller
             $catalog_sql = $this->dynamic->t($filters['table'])
                 ->where($where);
 
-            if (isset($form['cat_location']))
+            if (isset($form['cat_location'])) {
                 $catalog_sql = $catalog_sql->whereIn("{$filters['table']}.cat_location", $form['cat_location']);
+            }
 
-            if (isset($form['type_object']))
+            if (isset($form['type_object'])) {
                 $catalog_sql = $catalog_sql->where(
                     function ($query) use ($form, $filters) {
                         for ($i = 0; $i < count($form['type_object']); $i++) {
                             $query->orwhere(
                                 "{$filters['table']}.type_object",
                                 'like',
-                                '%"' . $form['type_object'][$i] . '"%'
+                                '%"'.$form['type_object'][$i].'"%'
                             );
                         }
                     }
                 );
+            }
 
-            if (isset($form['development_facilities']))
+            if (isset($form['development_facilities'])) {
                 $catalog_sql = $catalog_sql->where(
                     function ($query) use ($form, $filters) {
                         for ($i = 0; $i < count($form['development_facilities']); $i++) {
@@ -1768,47 +1816,51 @@ class MainController extends Controller
                             $query->orwhere(
                                 "{$filters['table']}.development_facilities",
                                 'like',
-                                '%"' . $form['development_facilities'][$i] . '"%'
+                                '%"'.$form['development_facilities'][$i].'"%'
                             );
                         }
                     }
                 );
+            }
 
-            if (isset($form['estimated_completion']))
+            if (isset($form['estimated_completion'])) {
                 $catalog_sql = $catalog_sql->where(
                     function ($query) use ($form, $filters) {
                         for ($i = 0; $i < count($form['estimated_completion']); $i++) {
                             $query->orwhere(
                                 "{$filters['table']}.estimated_completion",
                                 'like',
-                                '%"' . $form['estimated_completion'][$i] . '"%'
+                                '%"'.$form['estimated_completion'][$i].'"%'
                             );
                         }
                     }
                 );
+            }
 
             if (count($or_where) > 2) {
-                if (isset($form['cat_location']))
+                if (isset($form['cat_location'])) {
                     $catalog_sql = $catalog_sql->orWhere($or_where)
                         ->whereIn("{$filters['table']}.cat_location", $form['cat_location']);
-                else
+                } else {
                     $catalog_sql = $catalog_sql->orWhere($or_where);
+                }
 
 
-                if (isset($form['type_object']))
+                if (isset($form['type_object'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['type_object']); $i++) {
                                 $query->orwhere(
                                     "{$filters['table']}.type_object",
                                     'like',
-                                    '%"' . $form['type_object'][$i] . '"%'
+                                    '%"'.$form['type_object'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
 
-                if (isset($form['development_facilities']))
+                if (isset($form['development_facilities'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['development_facilities']); $i++) {
@@ -1816,47 +1868,51 @@ class MainController extends Controller
                                 $query->orwhere(
                                     "{$filters['table']}.development_facilities",
                                     'like',
-                                    '%"' . $form['development_facilities'][$i] . '"%'
+                                    '%"'.$form['development_facilities'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
 
-                if (isset($form['estimated_completion']))
+                if (isset($form['estimated_completion'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['estimated_completion']); $i++) {
                                 $query->orwhere(
                                     "{$filters['table']}.estimated_completion",
                                     'like',
-                                    '%"' . $form['estimated_completion'][$i] . '"%'
+                                    '%"'.$form['estimated_completion'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
             }
 
             if (count($or_where_2) > 2) {
-                if (isset($form['cat_location']))
+                if (isset($form['cat_location'])) {
                     $catalog_sql = $catalog_sql->orWhere($or_where_2)
                         ->whereIn("{$filters['table']}.cat_location", $form['cat_location']);
-                else
+                } else {
                     $catalog_sql = $catalog_sql->orWhere($or_where_2);
+                }
 
-                if (isset($form['type_object']))
+                if (isset($form['type_object'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['type_object']); $i++) {
                                 $query->orwhere(
                                     "{$filters['table']}.type_object",
                                     'like',
-                                    '%"' . $form['type_object'][$i] . '"%'
+                                    '%"'.$form['type_object'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
 
-                if (isset($form['development_facilities']))
+                if (isset($form['development_facilities'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['development_facilities']); $i++) {
@@ -1864,32 +1920,35 @@ class MainController extends Controller
                                 $query->orwhere(
                                     "{$filters['table']}.development_facilities",
                                     'like',
-                                    '%"' . $form['development_facilities'][$i] . '"%'
+                                    '%"'.$form['development_facilities'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
 
-                if (isset($form['estimated_completion']))
+                if (isset($form['estimated_completion'])) {
                     $catalog_sql = $catalog_sql->where(
                         function ($query) use ($form, $filters) {
                             for ($i = 0; $i < count($form['estimated_completion']); $i++) {
                                 $query->orwhere(
                                     "{$filters['table']}.estimated_completion",
                                     'like',
-                                    '%"' . $form['estimated_completion'][$i] . '"%'
+                                    '%"'.$form['estimated_completion'][$i].'"%'
                                 );
                             }
                         }
                     );
+                }
             }
 
             $order_by = $filters['group']["group_{$form['group']}_{$form['sort_by']}"];
 
-            if (is_array($order_by))
+            if (is_array($order_by)) {
                 $order_by = DB::raw("{$order_by['mode']}({$filters['table']}.{$order_by['name']})");
-            else
-                $order_by = $filters['table'] . '.' . $order_by;
+            } else {
+                $order_by = $filters['table'].'.'.$order_by;
+            }
 
             $data['catalog'] = $catalog_sql->join(
                 'files',
@@ -1901,7 +1960,7 @@ class MainController extends Controller
                         ->where('files.main', '=', 1);
                 }
             )
-                ->groupBy($filters['table'] . '.id')
+                ->groupBy($filters['table'].'.id')
                 ->orderBy($order_by, $form['sort_by'])
                 ->select("{$filters['table']}.*", 'files.file', 'files.crop')
                 ->paginate($form['show_items'] ?? 36);
@@ -1912,8 +1971,9 @@ class MainController extends Controller
             $data['catalog'] = [];
             $cart_data = [];
 
-            for ($i = 0; count($cart ?? []) > $i; $i++)
+            for ($i = 0; count($cart ?? []) > $i; $i++) {
                 $cart_data[$cart[$i]['name_url']][] = $cart[$i]['id'] ?? 0;
+            }
 
             foreach ($cart_data as $k => $ids) {
                 $filters = $this->_catalog_array($k);
@@ -1921,8 +1981,9 @@ class MainController extends Controller
                 if ($filters) {
                     $query = $this->dynamic->t($filters['table']);
 
-                    if (!empty($ids))
+                    if (!empty($ids)) {
                         $query = $query->whereIn("{$filters['table']}.id", $ids);
+                    }
 
                     $catalog = $query
                         ->join(
@@ -1963,7 +2024,7 @@ class MainController extends Controller
             $query = function ($count) {
                 return '
       (SELECT
- ' . ($count ? 'COUNT(catalog_development_projects.id) AS count' : ('
+ '.($count ? 'COUNT(catalog_development_projects.id) AS count' : ('
        catalog_development_projects.id COLLATE utf8_general_ci as id,
        files.file COLLATE utf8_general_ci as file,
        files.crop COLLATE utf8_general_ci as crop,
@@ -1980,7 +2041,7 @@ class MainController extends Controller
        catalog_development_projects.bedrooms_to COLLATE utf8_general_ci as bedrooms_to,
        catalog_development_projects.bedrooms COLLATE utf8_general_ci as bedrooms,
        catalog_development_projects.in_portfolio COLLATE utf8_general_ci as in_portfolio,
-       catalog_development_projects.little_description COLLATE utf8_general_ci as little_description')) . '
+       catalog_development_projects.little_description COLLATE utf8_general_ci as little_description')).'
       FROM catalog_development_projects
       LEFT OUTER join `files`
         on `catalog_development_projects`.`id` = `files`.`id_album` and `files`.`name_table` = \'catalog_development_projectsalbum\' and
@@ -1990,7 +2051,7 @@ class MainController extends Controller
       UNION ALL
 
       (SELECT
-     ' . ($count ? 'COUNT(catalog_new_building.id) AS count' : ('
+     '.($count ? 'COUNT(catalog_new_building.id) AS count' : ('
        catalog_new_building.id COLLATE utf8_general_ci as id,
        files.file COLLATE utf8_general_ci as file,
        files.crop COLLATE utf8_general_ci as crop,
@@ -2007,7 +2068,7 @@ class MainController extends Controller
        catalog_new_building.bedrooms_to COLLATE utf8_general_ci as bedrooms_to,
        catalog_new_building.bedrooms COLLATE utf8_general_ci as bedrooms,
        catalog_new_building.in_portfolio COLLATE utf8_general_ci as in_portfolio,
-       catalog_new_building.little_description COLLATE utf8_general_ci as little_description')) . '
+       catalog_new_building.little_description COLLATE utf8_general_ci as little_description')).'
       FROM catalog_new_building
       LEFT OUTER join `files`
         on `catalog_new_building`.`id` = `files`.`id_album` and `files`.`name_table` = \'catalog_new_buildingalbum\' and
@@ -2017,7 +2078,7 @@ class MainController extends Controller
       UNION ALL
 
       (SELECT
-     ' . ($count ? 'COUNT(catalog_buy.id) AS count' : ('
+     '.($count ? 'COUNT(catalog_buy.id) AS count' : ('
        catalog_buy.id COLLATE utf8_general_ci as id,
        files.file COLLATE utf8_general_ci as file,
        files.crop COLLATE utf8_general_ci as crop,
@@ -2034,7 +2095,7 @@ class MainController extends Controller
        catalog_buy.bedrooms_to COLLATE utf8_general_ci as bedrooms_to,
        catalog_buy.bedrooms COLLATE utf8_general_ci as bedrooms,
        catalog_buy.in_portfolio COLLATE utf8_general_ci as in_portfolio,
-       catalog_buy.little_description COLLATE utf8_general_ci as little_description')) . '
+       catalog_buy.little_description COLLATE utf8_general_ci as little_description')).'
       FROM catalog_buy
       LEFT OUTER join `files`
         on `catalog_buy`.`id` = `files`.`id_album` and `files`.`name_table` = \'catalog_buyalbum\' and
@@ -2044,7 +2105,7 @@ class MainController extends Controller
       UNION ALL
 
       (SELECT
-     ' . ($count ? 'COUNT(catalog_rent.id) AS count' : ('
+     '.($count ? 'COUNT(catalog_rent.id) AS count' : ('
        catalog_rent.id COLLATE utf8_general_ci as id,
        files.file COLLATE utf8_general_ci as file,
        files.crop COLLATE utf8_general_ci as crop,
@@ -2061,7 +2122,7 @@ class MainController extends Controller
        catalog_rent.bedrooms_to COLLATE utf8_general_ci as bedrooms_to,
        catalog_rent.bedrooms COLLATE utf8_general_ci as bedrooms,
        catalog_rent.in_portfolio COLLATE utf8_general_ci as in_portfolio,
-       catalog_rent.little_description COLLATE utf8_general_ci as little_description')) . '
+       catalog_rent.little_description COLLATE utf8_general_ci as little_description')).'
       FROM catalog_rent
       LEFT OUTER join `files`
         on `catalog_rent`.`id` = `files`.`id_album` and `files`.`name_table` = \'catalog_rentalbum\' and
@@ -2072,15 +2133,16 @@ class MainController extends Controller
             $data['catalog'] = json_decode(
                 json_encode(
                     DB::select(
-                        $query(false) . ' ORDER BY `id` DESC LIMIT ' . ($page - 1) . ', ' . ($limit) . ' ;'
+                        $query(false).' ORDER BY `id` DESC LIMIT '.($page - 1).', '.($limit).' ;'
                     )
                 ), true
             );
 
             $data['count'] = DB::select($query(true));
 
-            foreach ($data['count'] as $v)
+            foreach ($data['count'] as $v) {
                 $count = $count + $v->count;
+            }
 
             $data['count'] = $count;
             $data['page'] = $page ? $page / $limit : 1;
