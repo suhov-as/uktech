@@ -26,16 +26,20 @@
                             <div class="team-member__info-content">
                                 <h4 class="team-member__title">{!! $langSt($emp['name']) !!}</h4>
                                 <span class="team-member__subtitle">{!! $langSt($emp['position']) !!}</span>
-                                <address class="team-member__contact-info">
-                                <span class="address-info">
+                                <div class="team-member__contact-info">
+                                    @if(!empty($emp['email']))
+                                        <span class="address-info">
                                     <svg><use xlink:href="/images/svg/sprite.svg#envelope"></use></svg>
                                     <a href="mailto:name@gmail.com">{!! $langSt($emp['email']) !!}</a>
                                 </span>
-                                    <span class="address-info">
+                                    @endif
+                                    @if(!empty($emp['phone']))
+                                        <span class="address-info">
                                     <svg><use xlink:href="/images/svg/sprite.svg#phone"></use></svg>
                                     <a href="tel:{!! $langSt($emp['phone']) !!}">{!! $langSt($emp['phone']) !!}</a>
                                 </span>
-                                </address>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="team-member__description">
