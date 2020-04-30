@@ -24,7 +24,7 @@
                     @foreach($slider_1 as $sl_1)
                         @php($img = $sl_1['file'] ? $sl_1['crop'] ? $path_big . $sl_1['crop'] : $path_big . $sl_1['file'] : '')
                     <li>
-                        <a href="{{$img}}" class=""><svg><use xlink:href="/images/svg/sprite.svg#pdf"></use></svg> {{ str_replace('.pdf','',$sl_1['orig_name']) }}</a>
+                        <a href="{{$img}}" class=""><svg><use xlink:href="/images/svg/sprite.svg#pdf"></use></svg> {{ str_replace(['.pdf','.jpg','.jpeg','.png'],'',$sl_1['orig_name']) }}</a>
                     </li>
                     @endforeach
                 </ul>
