@@ -30,7 +30,7 @@
                                     @if(!empty($emp['email']))
                                         <span class="address-info">
                                             <svg><use xlink:href="/images/svg/sprite.svg#envelope"></use></svg>
-                                            <a href="mailto:name@gmail.com">{!! $langSt($emp['email']) !!}</a>
+                                            <a href="mailto:{!! $langSt($emp['email']) !!}">{!! $langSt($emp['email']) !!}</a>
                                         </span>
                                     @endif
                                     @if(!empty($emp['phone']))
