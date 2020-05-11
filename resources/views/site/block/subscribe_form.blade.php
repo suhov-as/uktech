@@ -8,7 +8,7 @@
     <div class="input-holder phone-field" style="margin-right: 1px;">
         <input type="text" name="phone" placeholder="Phone"/>
     </div>
-    <div class="input-holder email-field" style="margin-right: 1px;">
+    <div class="input-holder mail-field" style="margin-right: 1px;">
         <input type="email" name="email" placeholder="Email"/>
     </div>
 
