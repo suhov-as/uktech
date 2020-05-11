@@ -24,7 +24,7 @@
                         <div class="team-member__info">
                             <img src="{{ $img }}" alt="">
                             <div class="team-member__info-content">
-                                <h4 class="team-member__title">{!! $langSt($emp['name']) !!}</h4>
+                                <h4 class="team-member__title">{!! $langSt($emp['full_name']) !!}</h4>
                                 <span class="team-member__subtitle">{!! $langSt($emp['position']) !!}</span>
                                 <address class="team-member__contact-info">
                                     @if(!empty($emp['email']))
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="team-member__description">
-                            <h4>{!! $langSt($emp['name']) !!}</h4>
+                            <h4>{!! $langSt($emp['full_name']) !!}</h4>
                             <p>{!! $langSt($emp['user_description']) !!}</p>
                         </div>
                     </div>
