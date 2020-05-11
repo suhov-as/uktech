@@ -1237,9 +1237,11 @@ class MainController extends Controller
                 $this->dynamic->t('params_subscribe')->insertGetId(
                     [
                         'created_at'     => Carbon::now(),
+                        'updated_at'     => Carbon::now(),
                         'subscribe_mail' => $form_data['email'],
-                        'periodicity'    => $form_data['periodicity'],
-                        'type_subscribe' => $form_data['type_subscribe'],
+                        'phone'          => $form_data['phone'],
+                        'first_name'     => $form_data['first_name'],
+                        'last_name'      => $form_data['last_name']
                     ]
                 );
             }

@@ -462,10 +462,10 @@
     "big_width"       : "0",
     "class_module"    : "fa fa-cog",
     "column_index"    : [
-      "name",
-      "little_description",
+      "first_name",
+      "last_name",
       "subscribe_mail",
-      "type_object",
+      "phone",
       "active"
     ],
     "count_module"    : "20",
@@ -479,11 +479,10 @@
     "order"           : "11",
     "parent"          : "10",
     "plugins"         : [
-      "name",
+      "first_name",
+      "last_name",
       "subscribe_mail",
-      "periodicity",
-      "type_subscribe",
-      "little_description"
+      "phone"
     ],
     "params"          : {
       "type_subscribe": {
