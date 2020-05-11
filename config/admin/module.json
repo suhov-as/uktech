@@ -1211,6 +1211,7 @@
     "name_module"     : "Сотрудники",
     "order"           : "2",
     "plugins"         : [
+      "name",
       "full_name",
       "phone",
       "email",
