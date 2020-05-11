@@ -39,23 +39,6 @@
         <tr>
           <td width="50%"
             style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
-            @lang('main.periodicity'):
-          </td>
-          <td width="50%"
-            style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#30343f; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
-            @if($periodicity === 1)
-              @lang('main.once_a_week')
-            @elseif($periodicity === 2)
-              @lang('main.1_time_per_month')
-            @else
-              @lang('main.everyday')
-            @endif
-          </td>
-        </tr>
-
-        <tr>
-          <td width="50%"
-            style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
             @lang('main.subscribe_to'):
           </td>
           <td width="50%"
