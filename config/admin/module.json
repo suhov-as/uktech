@@ -1196,6 +1196,9 @@
     "big_width"       : "800",
     "class_module"    : "fa fa-home",
     "column_index"    : [
+      "full_name",
+      "position",
+      "email"
     ],
     "count_module"    : "20",
     "show_count"      : false,
