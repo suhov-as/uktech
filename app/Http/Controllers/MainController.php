@@ -794,7 +794,7 @@ class MainController extends Controller
                     ->where('files.name_table', '=', 'employeesalbum');
             })
             ->where('employees.active', '=', 1)
-            ->orderBy('sort')
+            ->orderBy('employees.sort')
             ->get()
             ->toArray();
 
