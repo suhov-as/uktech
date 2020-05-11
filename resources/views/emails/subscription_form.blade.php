@@ -28,10 +28,40 @@
         <tr>
           <td width="50%"
             style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
-            @lang('main.email'):
+            @lang('main.your_name'):
           </td>
           <td width="50%"
             style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#30343f; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            {!! empty($first_name) ? '-' : "<a style=\"color: #332243\">$first_name</a>" !!}
+          </td>
+        </tr>
+        <tr>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            @lang('main.your_surname'):
+          </td>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#30343f; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            {!! empty($email) ? '-' : "<a style=\"color: #332243\">$last_name</a>" !!}
+          </td>
+        </tr>
+        <tr>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            @lang('main.your_phone'):
+          </td>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#30343f; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            {!! empty($phone) ? '-' : "<a style=\"color: #332243\">$phone</a>" !!}
+          </td>
+        </tr>
+        <tr>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#657482; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
+            @lang('main.email'):
+          </td>
+          <td width="50%"
+              style="font-size: 15px; line-height: 18px; padding: 10px 0; font-family:Verdana, Arial, sans-serif; color:#30343f; text-align: left; border-top-width: 1px; border-top-color: #dcbaa1; border-top-style: dashed;">
             {!! empty($email) ? '-' : "<a style=\"color: #332243\">$email</a>" !!}
           </td>
         </tr>
