@@ -43,7 +43,6 @@
                             </div>
                         </div>
                         <div class="team-member__description">
-                            <h4>{!! $langSt($emp['full_name']) !!}</h4>
                             <p>{!! $langSt($emp['user_description']) !!}</p>
                         </div>
                     </div>
