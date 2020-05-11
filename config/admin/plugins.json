@@ -588,6 +588,24 @@
     "sql_column" : "full_name"
   },
   {
+    "name"       : "first_name",
+    "typeField"  : "input",
+    "nameText"   : "Имя",
+    "nameAttr"   : "pl[first_name]",
+    "description": "Текстовое поле инпут \"Имя\"",
+    "idAttr"     : "inputFirst_name",
+    "sql_column" : "first_name"
+  },
+  {
+    "name"       : "last_name",
+    "typeField"  : "input",
+    "nameText"   : "Фамилия",
+    "nameAttr"   : "pl[last_name]",
+    "description": "Текстовое поле инпут \"Фамилия\"",
+    "idAttr"     : "inputLast_name",
+    "sql_column" : "last_name"
+  },
+  {
     "name"       : "delivery_time_1",
     "typeField"  : "input",
     "nameText"   : "Время доставки(запрсил клиент)",
