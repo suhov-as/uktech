@@ -1201,7 +1201,7 @@
     "show_count"      : false,
     "filters"         : [],
     "lang"            : [
-      "author",
+      "full_name",
       "position",
       "user_description"
     ],
@@ -1211,7 +1211,7 @@
     "name_module"     : "Сотрудники",
     "order"           : "2",
     "plugins"         : [
-      "author",
+      "full_name",
       "phone",
       "email",
       "position",
