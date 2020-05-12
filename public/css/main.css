@@ -4153,7 +4153,7 @@ body:not(.touch-device) .posts-list .post:hover:before {
 }
 
 .team-member__info {
-    width: 41%;
+    width: 35%;
     -webkit-flex-shrink: 0;
     -moz-flex-shrink: 0;
     -ms-flex: 0;
@@ -4167,13 +4167,14 @@ body:not(.touch-device) .posts-list .post:hover:before {
 .team-member__info-content {
     background: #240D4D;
     color: #fff;
-    padding: 40px 50px;
+    padding: 25px 30px;
 }
 
 .team-member__title {
     color: #fff;
     font-family: 'Roboto', sans-serif;
-    margin-bottom: 1em;
+    font-size: 22px;
+    margin-bottom: .5em;
 }
 
 .team-member__subtitle {
@@ -4184,6 +4185,10 @@ body:not(.touch-device) .posts-list .post:hover:before {
 
 .team-member__contact-info a {
     color: #fff;
+}
+
+.team-member__contact-info .address-info {
+    margin-bottom: 10px;
 }
 
 .team-member__contact-info .address-info svg {
